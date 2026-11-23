@@ -17,7 +17,7 @@ class BankAccount:
     def summary(self) -> str:
         return f"{self.owner}'s balance is N{self.balance:.2f}"
 
-    def isOverDrawn(self) -> bool:
+    def is_overdrawn(self) -> bool:
         return self.balance < 0
 
     def withdraw(self, amount: float) -> float:
@@ -40,13 +40,14 @@ print(VIPs)
 balance_map = {owner.owner: owner.balance for owner in accounts}
 
 print(balance_map)
-try :
-    for account in accounts:
+for account in accounts:
+    try :
+    
         account.deposit(2500.5)
-        account.withdraw(10994.4)
-except InsufficientFundsError as error:
-    print(f"There is an error{error}")
+        account.withdraw(10995.4)
+        print(account.summary())
+        print(account.is_overdrawn())
+    except InsufficientFundsError as error:
+        print(f"There is an error {error}")
 
-print(account.summary())
-print(account.isOverDrawn())
 
