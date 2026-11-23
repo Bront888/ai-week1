@@ -16,3 +16,7 @@ def test_overdraw_raises_insufficient_funds() -> None:
     account = BankAccount("Prince", 2000.0)
     with pytest.raises(InsufficientFundsError):
         account.withdraw(2400.0)
+
+def test_is_overdrown() -> None:
+    account = BankAccount("Lucy", 100.0)
+    assert account.is_overdrawn() is False
