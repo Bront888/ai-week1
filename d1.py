@@ -7,6 +7,9 @@ class BankAccount:
         self.owner: str = owner
         self.balance: float = balance
 
+    def __repr__(self):
+        return f"BankAccount(owner={self.owner!r}, balance={self.balance:.2f})"
+
     def deposit(self, amount: float) -> float:
         self.balance += amount
         return self.balance
