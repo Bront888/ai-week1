@@ -20,3 +20,7 @@ def test_overdraw_raises_insufficient_funds() -> None:
 def test_is_overdrown() -> None:
     account = BankAccount("Lucy", 100.0)
     assert account.is_overdrawn() is False
+
+def test_is_overdrown2() -> None:
+    account = BankAccount("Lucy", -50.0)
+    assert account.is_overdrawn() is True
