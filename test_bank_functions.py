@@ -16,6 +16,14 @@ def test_deposit_increases_balance(account: BankAccount, deposit_amount: float, 
     account.deposit(deposit_amount)
     assert account.balance == expected_balance
 
+def test_negative_deposit_is_rejected(account: BankAccount) -> None:
+    with pytest.raises(LessThanZeroAmountError):
+        account.deposit(-899.0)
+
+def test_zero_deposit_is_rejected(account: BankAccount) -> None:
+    with pytest.raises(LessThanZeroAmountError):
+        account.deposit(0.0)
+
 @pytest.mark.parametrize(
         "withdrawn_amount, expected_balance",
         [
@@ -39,10 +47,10 @@ def test_overdraw_raises_insufficient_funds(account: BankAccount) -> None:
     with pytest.raises(InsufficientFundsError):
         account.withdraw(2400.0)
 
-def test_is_overdrown() -> None:
+def test_is_overdrown_false_for_positive_balance() -> None:
     account = BankAccount("Lucy", 100.0)
     assert account.is_overdrawn() is False
 
-def test_is_overdrown2() -> None:
+def test_is_overdrown_true_for_negative_balance() -> None:
     account = BankAccount("Lucy", -50.0)
     assert account.is_overdrawn() is True
