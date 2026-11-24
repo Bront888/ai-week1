@@ -38,7 +38,6 @@ def test_negative_withdraw_rejected(account: BankAccount) -> None:
         account.withdraw(0.0)
 
 def test_overdraw_raises_insufficient_funds(account: BankAccount) -> None:
-    # account = BankAccount("Prince", 2000.0)
     with pytest.raises(InsufficientFundsError):
         account.withdraw(2400.0)
 
