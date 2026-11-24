@@ -1,19 +1,44 @@
 import pytest
 
-from d1 import InsufficientFundsError, BankAccount
+from d1 import InsufficientFundsError, BankAccount, LessThanZeroAmountError
+@pytest.fixture
+def account() -> BankAccount:
+    return BankAccount("Rapheal", 1000.0)
 
-def test_deposit_increases_balance() -> None:
-    account = BankAccount("Rapheal", 1000.0)
-    account.deposit(500.0)
-    assert account.balance == 1500.0
+@pytest.mark.parametrize(
+        "deposit_amount, expected_balance",
+        [
+            (500.0, 1500),
+            (4000.0, 5000)
+        ]
+)
+def test_deposit_increases_balance(account: BankAccount, deposit_amount: float, expected_balance: float) -> None:
+    account.deposit(deposit_amount)
+    assert account.balance == expected_balance
 
-def test_withdraw_reduces_balance() -> None:
-    account = BankAccount("Favour", 1000.0)
-    account.withdraw(200.0)
-    assert account.balance == 800.0
+@pytest.mark.parametrize(
+        "withdrawn_amount, expected_balance",
+        [
+            (300.0, 700.0),
+            (1000.0, 0)
+        ]
+)
+def test_withdraw_reduces_balance(account: BankAccount, withdrawn_amount: float, expected_balance: float) -> None:
+    account.withdraw(withdrawn_amount)
+    assert account.balance == expected_balance
 
-def test_overdraw_raises_insufficient_funds() -> None:
-    account = BankAccount("Prince", 2000.0)
+def test_negative_withdraw_rejected(account: BankAccount) -> None:
+    with pytest.raises(LessThanZeroAmountError):
+        account.withdraw(-588.0)
+        account.withdraw(0.0)
+
+def test_negative_withdraw_rejected(account: BankAccount) -> None:
+    with pytest.raises(LessThanZeroAmountError):
+        account.withdraw(-588.0)
+        account.withdraw(0.0)
+
+def test_overdraw_raises_insufficient_funds(account: BankAccount) -> None:
+    # account = BankAccount("Prince", 2000.0)
     with pytest.raises(InsufficientFundsError):
         account.withdraw(2400.0)
 
