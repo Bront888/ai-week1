@@ -1,20 +1,21 @@
 from dataclasses import dataclass
+from decimal import Decimal
 
 
 class InsufficientFundsError(Exception):
     pass
 
-class LessThanZeroAmountError(Exception):
+class InvalidAmountError(Exception):
     pass
 
 @dataclass
 class BankAccount:
     owner: str
-    balance: float = 0.0
+    balance: Decimal = Decimal("0.00")
 
-    def deposit(self, amount: float) -> float:
-        if amount <= 0:
-            raise LessThanZeroAmountError(f"Cannot withdraw amount {amount:.2f} it is unallowed")
+    def deposit(self, amount: Decimal) -> Decimal:
+        if amount <= Decimal("0"):
+            raise InvalidAmountError(f"Cannot deposit amount {amount:.2f} it is unallowed")
         self.balance += amount
         return self.balance
 
@@ -22,11 +23,11 @@ class BankAccount:
         return f"{self.owner}'s balance is N{self.balance:.2f}"
 
     def is_overdrawn(self) -> bool:
-        return self.balance < 0
+        return self.balance < Decimal("0")
 
-    def withdraw(self, amount: float) -> float:
-        if amount <= 0:
-            raise LessThanZeroAmountError(f"Cannot withdraw amount {amount:.2f} it is unallowed")
+    def withdraw(self, amount: Decimal) -> Decimal:
+        if amount <= Decimal("0"):
+            raise InvalidAmountError(f"Cannot withdraw amount {amount:.2f} it is unallowed")
         
         if amount > self.balance:
             raise InsufficientFundsError(f"Cannot withdraw N{amount:.2f}; balance is N{self.balance:.2f}")
@@ -55,10 +56,10 @@ if __name__ == "__main__":
             account.withdraw(8000.4)
             print(account.summary())
             print(account.is_overdrawn())
-        except (InsufficientFundsError, LessThanZeroAmountError) as error:
+        except (InsufficientFundsError, InvalidAmountError) as error:
             print(f"There is an error: {error}")
 
         try:
             account.deposit(-780.0)
-        except (LessThanZeroAmountError) as error:
+        except (InvalidAmountError) as error:
             print(f"There is an error: {error}")
