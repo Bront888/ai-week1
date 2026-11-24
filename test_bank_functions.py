@@ -30,11 +30,9 @@ def test_withdraw_reduces_balance(account: BankAccount, withdrawn_amount: float,
 def test_negative_withdraw_rejected(account: BankAccount) -> None:
     with pytest.raises(LessThanZeroAmountError):
         account.withdraw(-588.0)
-        account.withdraw(0.0)
 
-def test_negative_withdraw_rejected(account: BankAccount) -> None:
+def test_zero_withdraw_rejected(account: BankAccount) -> None:
     with pytest.raises(LessThanZeroAmountError):
-        account.withdraw(-588.0)
         account.withdraw(0.0)
 
 def test_overdraw_raises_insufficient_funds(account: BankAccount) -> None:
